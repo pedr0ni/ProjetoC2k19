@@ -11,19 +11,20 @@ public class App {
 
         System.out.println("Bem-vindo ao jogo de labirinto!\nEscolha o nome do arquivo de mapa:");
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); // Cria o Scanner
 
-        String nomeDigitado = scanner.nextLine();
-
-        Mapa mapa = new Mapa(nomeDigitado);
+        String nomeDigitado = scanner.nextLine(); // Recebe um valor
+        Mapa mapa = new Mapa(nomeDigitado); // Cria um novo Mapa
 
         try {
-            mapa.loadMapa();
-        } catch (IOException | NumberFormatException e) {
+            mapa.loadMapa(); // Carrega o mapa
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        scanner.close();
+        System.out.println(mapa);
+
+        scanner.close(); // Fecha o Scanner
         
     }
 

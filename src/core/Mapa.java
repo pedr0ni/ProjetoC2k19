@@ -1,77 +1,135 @@
 package core;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Classe Mapa do Labirinto
+ * Projeto Integrado C
+ * @author Matheus Pedroni 18079020 (github.com/pedr0ni)
+ * @author Amanda
+ * @since 2019
+ */
 public class Mapa {
 
+    /* Atributos do arquivo */
     private String nome;
-
     private int altura;
     private int largura;
 
+    /* Atributos do mapa */
     private char[][] labirinto;
 
-    public Mapa (String nome) {
+    /**
+     * Construtor da classe
+     * @param String Nome do arquivo do mapa
+     */
+    public Mapa (String nome) 
+    {
         this.nome = nome;
     }
 
-    public void loadMapa() throws IOException,NumberFormatException,Exception {
+    /**
+     * Carrega o mapa do labirinto
+     * @throws IOException (Caso o arquivo não seja encontrado)
+     * @throws NumberFormatException (Caso a primeira linha não seja um número)
+     * @throws Exception (Caso o número da largura ou altura do arquivo esteja errado)
+     * @see java.io.File
+     */
+    public void loadMapa() 
+    throws IOException, NumberFormatException, Exception 
+    {
         
-        File file = new File(this.nome);
-        if (!file.exists()) { // Verifica se o arquivo existe
+        /* Carrega as informações do arquivo (Não o conteudo) */
+        File file = new File("C:/Users/PEDRONI/Documents/Java Workspace/Projeto/Projeto Integrado C/ProjetoC/bin/core/"+this.nome.toLowerCase());
+
+        /* Verifica se o arquivo existe */
+        if (!file.exists()) {
             throw new IOException("O arquivo " + this.nome + " não existe.");
         }
+
+        /* Cria o leitor de arquivos em buffer */
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
         String line;
-        int index = 0;
-        int indexLabirinto = 0;
-        while ((line = reader.readLine()) != null) {
-            if (index == 0) {
+
+        int index = 0; // Número da linha do arquivo
+        int indexLabirinto = 0; // Número da linha da matriz do mapa
+
+        while ((line = reader.readLine()) != null) 
+        {
+            /* Linha 0: Tem que ser o número total de linhas do mapa */
+            if (index == 0) 
+            {
                 try {
-                    this.altura = Integer.parseInt(line);
+                    this.altura = Integer.parseInt(line); // Recebe o valor da linha e converte para int
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("A primeira linha precisa ser o número da altura");
                 }
             }
-            if (index == 1) {
+            /* Linha 1: Apenas vê o tamanho da string para definir o limite do tamanho das colunas da matriz */
+            if (index == 1) 
+            {
                 this.largura = line.length();
+
+                /* Tendo definido os dois limites (altura e largurra [linhas e colunas]) da matriz é possível reservar o espaço para receber os valores do mapa */
                 this.labirinto = new char[this.altura][this.largura];
             }
-            if (line.length() != this.largura) {
-                throw new Exception("A largura é diferente de " + this.largura);
-            }
-            if (index >= 1) {
-                for (int i = 0; i < line.length(); i++) {
+
+            /* Recebe o valor do arquivo de texto e coloca dentro da matriz do mapa */
+            if (index >= 1) 
+            {
+
+                /* Verifica se a linha está dentro do limite de colunas da matriz */
+                if (line.length() != this.largura) 
+                {
+                    throw new Exception("A largura é diferente de " + this.largura);
+                }
+
+                /* Para cada linha é preciso correr cada char da string e adicionar na matriz */
+                for (int i = 0; i < line.length(); i++) 
+                {
                     this.labirinto[indexLabirinto][i] = line.charAt(i);
                 }
-                indexLabirinto++;
+
+                indexLabirinto++; // Incrementa a linha da matriz
             }
 
-            index++;
+            index++; // Incrementa a linha do arquivo
         }
 
-        if (index != this.altura) {
+        /**
+         * Verifica se o total de linhas ultrapassa o limite definido de altura
+         * O número da linha (index) tem que ser subtraido 1 pois ele conta a linha 0 (que define o tamanho da altura)
+         */
+        if (index - 1 != this.altura) 
+        {
             throw new Exception("O número de linhas é diferente de " + this.altura);
         }
 
-        reader.close();
+        reader.close(); // Fecha o leitor do arquivo
     }
 
-    public String getNome() {
+    /**
+     * Nome do Labirinto
+     * @return String Nome
+     */
+    public String getNome() 
+    {
         return this.nome;
     }
 
-    public String toString() {
+    /**
+     * Mostra as infos. do mapa do labirinto
+     * @return String Infos.
+     */
+    public String toString() 
+    {
         System.out.println("Labirinto " + this.nome);
-        String mapa = "";
-        
+        String mapa = "Total de Linhas: " + this.altura + "\nTotal de colunas: " + this.largura;
         return mapa;
-
     }
 
 }
