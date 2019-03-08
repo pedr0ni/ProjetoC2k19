@@ -36,7 +36,7 @@ public class Mapa {
      * @throws IOException (Caso o arquivo não seja encontrado)
      * @throws NumberFormatException (Caso a primeira linha não seja um número)
      * @throws Exception (Caso o número da largura ou altura do arquivo esteja errado)
-     * @see java.io.File
+     * @see https://docs.oracle.com/javase/7/docs/api/java/io/File.html
      */
     public void loadMapa() 
     throws IOException, NumberFormatException, Exception 
