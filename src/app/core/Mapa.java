@@ -46,7 +46,8 @@ public class Mapa {
         File file = new File("C:/Users/PEDRONI/Documents/Java Workspace/Projeto/Projeto Integrado C/ProjetoC/bin/core/"+this.nome.toLowerCase());
 
         /* Verifica se o arquivo existe */
-        if (!file.exists()) {
+        if (!file.exists()) 
+        {
             throw new IOException("O arquivo " + this.nome + " não existe.");
         }
 
