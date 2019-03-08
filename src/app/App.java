@@ -1,9 +1,8 @@
 package app;
 
-import java.io.IOException;
 import java.util.Scanner;
 
-import core.Mapa;
+import app.core.Mapa;
 
 public class App {
 
