@@ -43,7 +43,7 @@ public class Mapa {
     {
         
         /* Carrega as informações do arquivo (Não o conteudo) */
-        File file = new File("C:/Users/PEDRONI/Documents/Java Workspace/Projeto/Projeto Integrado C/ProjetoC/bin/core/"+this.nome.toLowerCase());
+        File file = new File(Mapa.class.getResource(this.nome.toLowerCase()).getPath());
 
         /* Verifica se o arquivo existe */
         if (!file.exists()) 

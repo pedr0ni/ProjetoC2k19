@@ -1,7 +1,6 @@
 package app;
 
 import java.util.Scanner;
-
 import app.core.Mapa;
 
 public class App {
