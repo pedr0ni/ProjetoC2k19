@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Classe Mapa do Labirinto
@@ -41,15 +42,17 @@ public class Mapa {
     public void loadMapa() 
     throws IOException, NumberFormatException, Exception 
     {
-        
-        /* Carrega as informações do arquivo (Não o conteudo) */
-        File file = new File(Mapa.class.getResource(this.nome.toLowerCase()).getPath());
-
-        /* Verifica se o arquivo existe */
-        if (!file.exists()) 
+    	
+    	URL resource = this.getClass().getResource(this.nome.toLowerCase());
+    	
+    	/* Verifica se o arquivo existe */
+        if (resource == null) 
         {
             throw new IOException("O arquivo " + this.nome + " não existe.");
         }
+        
+        /* Carrega as informações do arquivo (Não o conteudo) */
+        File file = new File(resource.getPath());
 
         /* Cria o leitor de arquivos em buffer */
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -111,6 +114,22 @@ public class Mapa {
         }
 
         reader.close(); // Fecha o leitor do arquivo
+    }
+    
+    /**
+     * Altura do Labirinto
+     * @return int Altura
+     */
+    public int getAltura() {
+    	return this.altura;
+    }
+    
+    /**
+     * Largura do Labirinto
+     * @return int Largura
+     */
+    public int getLargura() {
+    	return this.largura;
     }
 
     /**
