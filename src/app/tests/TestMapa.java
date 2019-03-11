@@ -23,6 +23,11 @@ public class TestMapa {
 		m.loadMapa();
 	}
 	
+	
+	/**
+	 * Teste para um mapa que está carregando largura ou altura incorreta(s)
+	 * Este teste também verifica se ocorreu alguma exception em um mapa correto
+	 */
 	@Test
 	public void testMapa() {
 		try {
