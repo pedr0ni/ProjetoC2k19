@@ -1,12 +1,9 @@
-package app.tests;
+package tests.app.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
 import java.io.IOException;
-
 import org.junit.Test;
-
 import app.core.Mapa;
 
 public class TestMapa {
@@ -18,7 +15,7 @@ public class TestMapa {
 	 * @throws Exception
 	 */
 	@Test(expected = IOException.class)
-	public void arquivoInvalido() throws Exception {
+	public void testArquivoInvalido() throws Exception {
 		Mapa m = new Mapa("MapaErrado.txt");
 		m.loadMapa();
 	}
@@ -29,7 +26,7 @@ public class TestMapa {
 	 * Este teste também verifica se ocorreu alguma exception em um mapa correto
 	 */
 	@Test
-	public void testMapa() {
+	public void testLoadMapa() {
 		try {
 			mapa.loadMapa();
 			assertEquals("A altura está incorreta", 3, mapa.getAltura());

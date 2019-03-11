@@ -131,7 +131,7 @@ public class Mapa {
     public int getLargura() {
     	return this.largura;
     }
-
+    
     /**
      * Nome do Labirinto
      * @return String Nome
@@ -149,6 +149,12 @@ public class Mapa {
     {
         System.out.println("Labirinto " + this.nome);
         String mapa = "Total de Linhas: " + this.altura + "\nTotal de colunas: " + this.largura;
+        for (int i = 0; i < this.altura; i++) {
+        	for (int j = 0; j < this.largura; j++) {
+        		System.out.print(this.labirinto[i][j]);
+        	}
+        	System.out.println();
+        }
         return mapa;
     }
 
