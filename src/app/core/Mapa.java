@@ -50,12 +50,9 @@ public class Mapa {
         {
             throw new IOException("O arquivo " + this.nome + " não existe.");
         }
-        
-        /* Carrega as informações do arquivo (Não o conteudo) */
-        File file = new File(resource.getPath());
 
         /* Cria o leitor de arquivos em buffer */
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        BufferedReader reader = new BufferedReader(new FileReader(resource.getPath()));
 
         String line;
 

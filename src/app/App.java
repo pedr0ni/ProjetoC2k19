@@ -7,7 +7,8 @@ public class App {
 
     public static void main(String[] args) {
 
-        System.out.println("Bem-vindo ao jogo de labirinto!\nEscolha o nome do arquivo de mapa:");
+        System.out.println("Bem-vindo ao jogo de labirinto!"
+        		+ "\nEscolha o nome do arquivo de mapa:");
 
         Scanner scanner = new Scanner(System.in); // Cria o Scanner
 
