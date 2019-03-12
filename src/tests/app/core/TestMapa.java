@@ -20,7 +20,6 @@ public class TestMapa {
 		m.loadMapa();
 	}
 	
-	
 	/**
 	 * Teste para um mapa que está carregando largura ou altura incorreta(s)
 	 * Este teste também verifica se ocorreu alguma exception em um mapa correto
@@ -35,5 +34,7 @@ public class TestMapa {
 			fail("Este é um mapa válido mas causou uma exeption: " + e.getMessage());
 		}
 	}
+	
+	
 
 }
