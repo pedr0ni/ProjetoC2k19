@@ -49,5 +49,33 @@ public class Player {
 	public void setMapa(Mapa mapaAtual) {
 		this.mapaAtual = mapaAtual;
 	}
+	
+	/**
+	 * Incrementa 1 na coluna da matriz (Y da coordenada)
+	 */
+	public void moveFoward() {
+		this.posicao.setX(this.posicao.getY() + 1);
+	}
+	
+	/**
+	 * Decremetna 1 na coluna da mateiz (Y da coordenada)
+	 */
+	public void moveBack() {
+		this.posicao.setX(this.posicao.getY() - 1);
+	}
+	
+	/**
+	 * Incrementa 1 na linha da matriz (X da coordenada)
+	 */
+	public void moveUp() {
+		this.posicao.setX(this.posicao.getX() + 1);
+	}
+	
+	/**
+	 * Decrementa 1 na linha da matriz (X da coordenada)
+	 */
+	public void moveDown() {
+		this.posicao.setX(this.posicao.getX() - 1);
+	}
 
 }
