@@ -34,4 +34,34 @@ public class Coordenada {
 		return y;
 	}
 
+	/**
+	 * 
+	 * @param x 
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * 
+	 * @param y
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public String toString() {
+		return "("+this.x + "," + this.y+")";
+	}
+	
+	/**
+	 * Instancia um novo tipo
+	 * @param x int (Linha da matriz)
+	 * @param y int (Coluna da matriz)
+	 * @return Coordenada
+	 */
+	public static Coordenada valueOf(int x, int y) {
+		return new Coordenada(x, y);
+	}
+	
 }
