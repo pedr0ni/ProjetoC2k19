@@ -32,7 +32,7 @@ public class App {
             mapa.loadMapa(); // Carrega o mapa
             System.out.println(mapa);
         } catch (Exception e) {
-            System.out.println("Ocorreu um erro: " + e.getMessage());
+            System.out.println(e.getClass().getName() + ": " + e.getMessage());
         }
         
     }

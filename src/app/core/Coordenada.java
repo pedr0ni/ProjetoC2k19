@@ -35,7 +35,7 @@ public class Coordenada {
 	}
 
 	/**
-	 * 
+	 * Linha da matriz
 	 * @param x 
 	 */
 	public void setX(int x) {
@@ -43,15 +43,16 @@ public class Coordenada {
 	}
 
 	/**
-	 * 
+	 * Coluna da matriz
 	 * @param y
 	 */
 	public void setY(int y) {
 		this.y = y;
 	}
 	
+	@Override
 	public String toString() {
-		return "("+this.x + "," + this.y+")";
+		return "(X: "+this.x + ", Y: " + this.y+")";
 	}
 	
 	/**
