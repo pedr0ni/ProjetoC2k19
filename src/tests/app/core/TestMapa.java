@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 
 import org.junit.Test;
 import app.core.Mapa;
+import app.exceptions.MapaException;
 
 public class TestMapa {
 	
@@ -19,27 +20,42 @@ public class TestMapa {
 	@Test(expected = IOException.class)
 	public void testArquivoInvalido() throws Exception {
 		Mapa m = new Mapa(new File("NaoExiste.txt"));
-		m.loadMapa();
+		try {
+			m.loadMapa();
+		} catch (Exception e) {
+			System.out.println("[TEST] [ OK! ] Mapa com arquvio inexistente : " + e.getMessage());
+			throw e;
+		}
 	}
 	
 	/**
 	 * Teste para um mapa com File == null
 	 * @throws Exception
 	 */
-	@Test(expected = Exception.class)
+	@Test(expected = IOException.class)
 	public void testFileNull() throws Exception {
 		Mapa m = new Mapa(null);
-		m.loadMapa();
+		try {
+			m.loadMapa();
+		} catch (Exception e) {
+			System.out.println("[TEST] [ OK! ] Mapa com file == null : " + e.getMessage());
+			throw e;
+		}
 	}
 	
 	/**
 	 * Teste para um mapa com buracos na parede
 	 * @throws Exception
 	 */
-	@Test(expected = Exception.class)
+	@Test(expected = MapaException.class)
 	public void testSemParede() throws Exception {
 		Mapa m = getMapa("semparede");
-		m.loadMapa();
+		try {
+			m.loadMapa();
+		} catch (Exception e) {
+			System.out.println("[TEST] [ OK! ] Mapa sem parede : " + e.getMessage());
+			throw e;
+		}
 	}
 	
 	/**
