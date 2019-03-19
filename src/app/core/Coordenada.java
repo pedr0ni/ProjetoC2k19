@@ -55,6 +55,14 @@ public class Coordenada {
 		return "(X: "+this.x + ", Y: " + this.y+")";
 	}
 	
+	@Override
+	public boolean equals(Object check) {
+		if (!(check instanceof Coordenada))
+				return false;
+		Coordenada toCheck = (Coordenada) check;
+		return this.x == toCheck.getX() && this.y == toCheck.getY();
+	}
+	
 	/**
 	 * Instancia um novo tipo
 	 * @param x int (Linha da matriz)

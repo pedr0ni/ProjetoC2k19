@@ -11,12 +11,12 @@ public class Pilha<E> {
 	
 	public Pilha(int tamanho) {
 		this.tamanho = tamanho;	
-		this.vetor = (E[]) new Object[tamanho]; // Aloca espaço para o vetor da pilha
+		this.vetor = (E[]) new Object[tamanho]; // Aloca espaï¿½o para o vetor da pilha
 		this.topo = -1;
 	}
 	
 	/**
-	 * Verifica se a pilha está vazia
+	 * Verifica se a pilha estï¿½ vazia
 	 * @return boolean Se a pilha estiver vazia
 	 */
 	public boolean isEmpty() {
@@ -24,7 +24,7 @@ public class Pilha<E> {
 	}
 	
 	/**
-	 * Verifica se a pilha está cheia
+	 * Verifica se a pilha estï¿½ cheia
 	 * @return boolean Se a pilha estiver cheia
 	 */
 	public boolean isFull() {
@@ -67,12 +67,18 @@ public class Pilha<E> {
  	/**
  	 * Pega o total de elementos empilhados
  	 * @return int Total de elementos
- 	 * @throws PilhaException Se a pilha estiver vazia
  	 */
- 	public int totalElementos() throws PilhaException {
- 		if (isEmpty())
- 			throw new PilhaException();
+ 	public int totalElementos() {
  		return this.topo + 1;
+ 	}
+ 	
+ 	@Override
+ 	public String toString() {
+ 		String res = "Pilha (" + totalElementos() + ") --> ";
+ 		for (int i = 0; i < totalElementos(); i++) {
+ 			res += this.vetor[i] + ", ";
+ 		}
+ 		return res;
  	}
 	
 }
