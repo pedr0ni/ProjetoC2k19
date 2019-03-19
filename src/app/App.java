@@ -30,7 +30,7 @@ public class App {
         Mapa mapa = new Mapa(toLoad); // Cria um novo Mapa
         
         Player meuPlayer = new Player("Matheus");     
-
+        
         try {	
             mapa.loadMapa(); // Carrega o mapa
             mapa.setPlayer(meuPlayer);
