@@ -9,10 +9,19 @@ public class Pilha<E> {
 	private int tamanho;
 	private int topo;
 	
+	@SuppressWarnings("unchecked")
 	public Pilha(int tamanho) {
 		this.tamanho = tamanho;	
 		this.vetor = (E[]) new Object[tamanho]; // Aloca espa�o para o vetor da pilha
 		this.topo = -1;
+	}
+	
+	/**
+	 * Getter
+	 * @return int Tamnho
+	 */
+	public int getTamanho() {
+		return this.tamanho;
 	}
 	
 	/**

@@ -14,7 +14,6 @@ import app.utils.Pilha;
  * Classe Mapa do Labirinto
  * Projeto Integrado C
  * @author Matheus Pedroni 18079020 (github.com/pedr0ni)
- * @author Amanda
  * @since 2019
  */
 public class Mapa {
@@ -42,8 +41,8 @@ public class Mapa {
 
     /**
      * Carrega o mapa do labirinto
-     * @throws IOException (Caso o arquivo n�o seja encontrado)
-     * @throws NumberFormatException (Caso a primeira linha n�o seja um n�mero)
+     * @throws IOException (Caso o arquivo não seja encontrado)
+     * @throws NumberFormatException (Caso a primeira linha não seja um número)
      * @throws MapaException (Caso ocorra algum problema no formato do mapa.)
      * @see https://docs.oracle.com/javase/7/docs/api/java/io/File.html
      */
@@ -51,18 +50,18 @@ public class Mapa {
     throws IOException, NumberFormatException, MapaException
     {
     
-    	/* Verifica se o arquivo � nulo */
+    	/* Verifica se o arquivo é nulo */
     	if (this.file == null) {
-    		throw new IOException("Arquivo inv�lido.");
+    		throw new IOException("Arquivo inválido.");
     	}
     	
     	/* Verifica se o arquivo existe */
         if (!this.file.exists()) 
         {
-            throw new IOException("O arquivo " + this.file.getName() + " n�o existe.");
+            throw new IOException("O arquivo " + this.file.getName() + " não existe.");
         }
         
-        /* Verifica se � um arquivo '.txt' */
+        /* Verifica se é um arquivo '.txt' */
         if (!this.file.getName().endsWith(".txt")) {
         	throw new IOException("O arquivo precisa ser do tipo .txt");
         }
@@ -72,8 +71,8 @@ public class Mapa {
 
         String line; // Cada linha lida do arquivo
 
-        int index = 0; // N�mero da linha do arquivo
-        int indexLabirinto = 0; // N�mero da linha da matriz do mapa
+        int index = 0; // Número da linha do arquivo
+        int indexLabirinto = 0; // Número da linha da matriz do mapa
 
         while ((line = reader.readLine()) != null) 
         {
@@ -83,16 +82,17 @@ public class Mapa {
                 try {
                     this.altura = Integer.parseInt(line); // Recebe o valor da linha e converte para int
                 } catch (NumberFormatException e) {
+                	reader.close();
                     throw new NumberFormatException("A primeira linha precisa ser o número da altura");
                 }
             }
-            /* Linha 1: Apenas l� o tamanho da string para definir o limite do tamanho das colunas da matriz */
+            /* Linha 1: Apenas lê o tamanho da string para definir o limite do tamanho das colunas da matriz */
             if (index == 1) 
             {
                 this.largura = line.length();
 
                 /* Tendo definido os dois limites (altura e largurra [linhas e colunas])
-                 * da matriz � poss�vel reservar o espa�o para receber os valores do mapa 
+                 * da matriz é possível reservar o espaço para receber os valores do mapa 
                  */
                 this.labirinto = new char[this.altura][this.largura];
             }
@@ -104,23 +104,26 @@ public class Mapa {
                 /* Verifica se a linha está dentro do limite de colunas da matriz */
                 if (line.length() != this.largura) 
                 {
-                    throw new MapaException("A largura � diferente de " + this.largura);
+                	reader.close();
+                    throw new MapaException("A largura é diferente de " + this.largura);
                 }
 
-                /* Para cada linha � preciso correr cada char da string e adicionar na matriz */
+                /* Para cada linha é preciso correr cada char da string e adicionar na matriz */
                 for (int i = 0; i < line.length(); i++) 
                 {
-                	/* Instancia uma coordenada para a posi��o atual (indexLabirinto e i) */
+                	/* Instancia uma coordenada para a posição atual (indexLabirinto e i) */
                 	Coordenada currentPos = Coordenada.valueOf(indexLabirinto, i);
-                	char here = line.charAt(i); // Pega o char na posi��o
+                	char here = line.charAt(i); // Pega o char na posição
     
-                	/* Verifica se o char � valido */
+                	/* Verifica se o char é valido */
                 	if (!isValid(here)) {
+                		reader.close();
                 		throw new MapaException("O char (" + here +") n�o � valido.", currentPos);
                 	}
                 	
                 	/* Verifica se a parede � valida */
                 	if (isWall(currentPos) && here == ' ') {
+                		reader.close();
                 		throw new MapaException("A parede n�o pode estar aberta (Conter espa�os em branco).", currentPos);
                 	}
                 	
@@ -128,6 +131,7 @@ public class Mapa {
                 	if (Character.toLowerCase(here) == 'e' && this.entrada == null && isWall(currentPos)) {
                 		this.entrada = currentPos;
                 	} else if (Character.toLowerCase(here) == 'e' && !isWall(currentPos)) {
+                		reader.close();
                 		/* Se a entrada n�o for em uma parede lan�a uma exception */
                 		throw new MapaException("Entrada localizada fora de uma parede.", currentPos);
                 	}
@@ -136,6 +140,7 @@ public class Mapa {
                 	if (Character.toLowerCase(here) == 's' && this.saida == null && isWall(currentPos)) {
                 		this.saida = currentPos;
                 	} else if (Character.toLowerCase(here) == 's' && !isWall(currentPos)) {
+                		reader.close();
                 		/* Caso a saida n�o for em uma parede lan�a uma exception */
                 		throw new MapaException("Saida localizada fora de uma parede.", currentPos);
                 	}
@@ -154,17 +159,20 @@ public class Mapa {
          */
         if (index - 1 != this.altura) 
         {
-            throw new MapaException("O n�mero de linhas � diferente de " + this.altura);
+        	reader.close();
+            throw new MapaException("O número de linhas é diferente de " + this.altura);
         }
         
         /* Verifica se est� faltando uma entrada */
         if (this.entrada == null) {
-        	throw new MapaException("Est� faltando uma entrada no mapa.");
+        	reader.close();
+        	throw new MapaException("Está faltando uma entrada no mapa.");
         }
         
         /* Verifica se est� faltando uma saida */
         if (this.saida == null) {
-        	throw new MapaException("Est� faltando uma saida no mapa.");
+        	reader.close();
+        	throw new MapaException("Está faltando uma saida no mapa.");
         }
 
         reader.close(); // Fecha o leitor do arquivo
@@ -196,14 +204,26 @@ public class Mapa {
     	return this.largura;
     }
     
+    /**
+     * Getter
+     * @return
+     */
     public Coordenada getEntrada() {
     	return this.entrada;
     }
     
+    /**
+     * Getter
+     * @return
+     */
     public Coordenada getSaida() {
     	return this.saida;
     }
     
+    /**
+     * Getter
+     * @return
+     */
     public Player getPlayer() {
     	return this.jogador;
     }
@@ -226,6 +246,10 @@ public class Mapa {
         return mapa;
     }
     
+    /**
+     * 
+     * @param stream
+     */
     public void printMapa(PrintStream stream) {
     	System.out.println("Player posicao: " + getPlayer().getPosicao());
     	String mapa = "";
@@ -277,15 +301,18 @@ public class Mapa {
      */
     public Pilha<Coordenada> getAdjacentes(Coordenada pos) throws PilhaException {
     	Pilha<Coordenada> res = new Pilha<Coordenada>(3);
-   
-    	if (checkAdjacente(this.labirinto[pos.getX()][pos.getY() + 1])) // Verifica frente
-    		res.empilhar(Coordenada.valueOf(pos.getX(), pos.getY() + 1));	
-    		
-    	if (checkAdjacente(this.labirinto[pos.getX() - 1][pos.getY()])) // Verifica cima
-    		res.empilhar(Coordenada.valueOf(pos.getX() - 1, pos.getY()));
+   	 	
+    	Coordenada cima = Coordenada.valueOf(pos.getX() - 1, pos.getY());
+    	if (checkAdjacente(this.labirinto[cima.getX()][cima.getY()]) && !getPlayer().isCaminho(cima)) // Verifica cima
+    		res.empilhar(cima);
     	
-    	if (checkAdjacente(this.labirinto[pos.getX() + 1][pos.getY()])) // Verifica embaixo
-    		res.empilhar(Coordenada.valueOf(pos.getX() + 1, pos.getY()));
+    	Coordenada baixo = Coordenada.valueOf(pos.getX() + 1, pos.getY());
+    	if (checkAdjacente(this.labirinto[baixo.getX()][baixo.getY()]) && !getPlayer().isCaminho(baixo)) // Verifica embaixo
+    		res.empilhar(baixo);
+    	
+    	Coordenada frente = Coordenada.valueOf(pos.getX(), pos.getY() + 1);
+    	if (checkAdjacente(this.labirinto[frente.getX()][frente.getY()]) && !getPlayer().isCaminho(frente)) // Verifica frente
+    		res.empilhar(frente);
     	
     	return res;
     }

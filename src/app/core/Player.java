@@ -1,8 +1,6 @@
 package app.core;
 
 import java.io.PrintStream;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import app.core.enums.PlayerMode;
 import app.exceptions.PilhaException;
@@ -10,7 +8,7 @@ import app.utils.Pilha;
 
 /**
  * Classe Player
- * Contem os m�todos para a��es do player que vai fazer o labirinto
+ * Contem os metodos para ações do player que vai fazer o labirinto
  * @author Matheus Pedroni (18079020) - github.com/pedr0ni
  * @author Amanda
  * @since 2019
@@ -115,22 +113,38 @@ public class Player {
 	public void startMoving(PrintStream stream) throws InterruptedException, PilhaException {
 		stream.println("Start moving...");
 		while (!isSaida()) {
-			
+
+			getMapa().printMapa(stream);
 			switch (this.mode) {
 			
 				case PROGRESSIVE:
 					Pilha<Coordenada> adj = getMapa().getAdjacentes(this.posicao);
-					Coordenada proxima = adj.desempilhar();
-					setPosicao(proxima);
-					
-					this.caminho.empilhar(proxima);
-					this.possibilidades.empilhar(adj);
-				
+					Coordenada proxima = null;
+					try {
+						proxima = adj.desempilhar();
+						setPosicao(proxima);
+						this.caminho.empilhar(proxima);
+						this.possibilidades.empilhar(adj);
+					} catch (PilhaException e) {
+						setMode(PlayerMode.REGRESSIVE);
+						System.out.println("Modo regressivo!");
+					}
 					break;
 				case REGRESSIVE:
+					Coordenada mover = this.caminho.desempilhar();
+					Pilha<Coordenada> adjt = this.possibilidades.desempilhar();
+					System.out.println(adjt);
+					if (adjt.isEmpty()) {
+						setPosicao(mover); // Se não tiver possibilidades volta no caminho
+					} else {
+						Coordenada aprox = adjt.desempilhar();
+						System.out.println("Indo para " + aprox);
+						setPosicao(aprox);
+						setMode(PlayerMode.PROGRESSIVE);
+						System.out.println("Modo progressivo!");
+					}
 					break;
 			}
-			getMapa().printMapa(stream);
 			Thread.sleep(1000L); // Aguarda 1 segundo
 		}
 		getMapa().printMapa(stream);
@@ -145,6 +159,27 @@ public class Player {
 				"  |~~~~~~~~~~~~~~~~~~~|\n" + 
 				"(^^^^^^^^^^^^^^^^^^^^^^^)\n" + 
 				" `'-------------------'`");
+	}
+	
+	/**
+	 * Verifica se o player ja passou pela {@link Coordenada}
+	 * @param pos {@link Coordenada}
+	 * @return boolean
+	 * @throws PilhaException
+	 */
+	public boolean isCaminho(Coordenada pos) throws PilhaException {
+		Pilha<Coordenada> aux = new Pilha<Coordenada>(this.caminho.getTamanho());
+		boolean res = false;
+		while (!this.caminho.isEmpty()) {
+			Coordenada check = this.caminho.desempilhar();
+			aux.empilhar(check);
+			res = check.equals(pos); // Verifica se tem na pilha
+		}
+		// Restaura a pilha
+		while (!aux.isEmpty()) {
+			this.caminho.empilhar(aux.desempilhar());
+		}
+		return res;
 	}
 	
 	public boolean isSaida() {
