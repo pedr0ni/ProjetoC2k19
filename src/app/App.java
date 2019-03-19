@@ -7,6 +7,7 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import app.core.Mapa;
+import app.core.Player;
 
 public class App {
 
@@ -27,10 +28,13 @@ public class App {
         	toLoad = pick.getSelectedFile(); // Pega o arquivo selecionado pelo usuario
         
         Mapa mapa = new Mapa(toLoad); // Cria um novo Mapa
+        
+        Player meuPlayer = new Player("Matheus");     
 
         try {	
             mapa.loadMapa(); // Carrega o mapa
-            System.out.println(mapa);
+            mapa.setPlayer(meuPlayer);
+            meuPlayer.startMoving(System.out);
         } catch (Exception e) {
             System.out.println(e.getClass().getName() + ": " + e.getMessage());
         }
