@@ -82,49 +82,37 @@ public class Player {
 		this.mapaAtual = mapaAtual;
 	}
 	
-	/**
-	 * Incrementa 1 na coluna da matriz (Y da coordenada)
-	 */
-	public void moveFoward() {
-		this.posicao.setY(this.posicao.getY() + 1);
+	private Coordenada checkCima() {
+		return Coordenada.valueOf(this.posicao.getX() - 1, this.posicao.getY());
 	}
-	
 	/**
-	 * Decremetna 1 na coluna da mateiz (Y da coordenada)
+	 * 
+	 * @param stream
+	 * @throws InterruptedException
+	 * @throws PilhaException
 	 */
-	public void moveBack() {
-		this.posicao.setX(this.posicao.getY() - 1);
-	}
-	
-	/**
-	 * Incrementa 1 na linha da matriz (X da coordenada)
-	 */
-	public void moveUp() {
-		this.posicao.setX(this.posicao.getX() + 1);
-	}
-	
-	/**
-	 * Decrementa 1 na linha da matriz (X da coordenada)
-	 */
-	public void moveDown() {
-		this.posicao.setX(this.posicao.getX() - 1);
-	}
-	
 	public void startMoving(PrintStream stream) throws InterruptedException, PilhaException {
 		stream.println("Start moving...");
 		while (!isSaida()) {
-
 			getMapa().printMapa(stream);
 			switch (this.mode) {
 			
 				case PROGRESSIVE:
 					Pilha<Coordenada> adj = getMapa().getAdjacentes(this.posicao);
 					Coordenada proxima = null;
+					
 					try {
+						System.out.println("Player: " + this);
+						System.out.println("POSSIVEIS: " + adj);
 						proxima = adj.desempilhar();
+						while (isCaminho(proxima) && !adj.isEmpty()) {
+							proxima = adj.desempilhar();
+						}
 						setPosicao(proxima);
+						
 						this.caminho.empilhar(proxima);
 						this.possibilidades.empilhar(adj);
+						
 					} catch (PilhaException e) {
 						setMode(PlayerMode.REGRESSIVE);
 						System.out.println("Modo regressivo!");
@@ -147,7 +135,6 @@ public class Player {
 			}
 			Thread.sleep(1000L); // Aguarda 1 segundo
 		}
-		getMapa().printMapa(stream);
 		stream.println("\n" + // Msg de fim :D
 				"       , , , , , ,\n" + 
 				"       |_|_|_|_|_|\n" + 
@@ -172,8 +159,11 @@ public class Player {
 		boolean res = false;
 		while (!this.caminho.isEmpty()) {
 			Coordenada check = this.caminho.desempilhar();
+			if (check.equals(pos)) {
+				res = true;
+				break;
+			}
 			aux.empilhar(check);
-			res = check.equals(pos); // Verifica se tem na pilha
 		}
 		// Restaura a pilha
 		while (!aux.isEmpty()) {

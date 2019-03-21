@@ -47,7 +47,7 @@ public class Pilha<E> {
 	 */
 	public void empilhar(E valor) throws PilhaException {
 		if (isFull())
-			throw new PilhaException();
+			throw new PilhaException("A pilha esta cheia");
 		this.vetor[++this.topo] = valor;
 	}
 	
@@ -58,7 +58,7 @@ public class Pilha<E> {
 	 */
  	public E desempilhar() throws PilhaException {
  		if (isEmpty())
- 			throw new PilhaException();
+ 			throw new PilhaException("A pilha esta vazia");
  		return this.vetor[this.topo--];
  	}
  	
@@ -69,7 +69,7 @@ public class Pilha<E> {
  	 */
  	public E valorTopo() throws PilhaException {
  		if (isEmpty())
- 			throw new PilhaException();
+ 			throw new PilhaException("Nenhum valor no topo. A pilha esta vazia");
  		return this.vetor[this.topo];
  	}
  	

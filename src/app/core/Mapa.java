@@ -84,7 +84,7 @@ public class Mapa {
                 } catch (NumberFormatException e) {
                 	reader.close();
                     throw new NumberFormatException("A primeira linha precisa ser o número da altura");
-                }
+                }	
             }
             /* Linha 1: Apenas lê o tamanho da string para definir o limite do tamanho das colunas da matriz */
             if (index == 1) 
@@ -118,13 +118,13 @@ public class Mapa {
                 	/* Verifica se o char é valido */
                 	if (!isValid(here)) {
                 		reader.close();
-                		throw new MapaException("O char (" + here +") n�o � valido.", currentPos);
+                		throw new MapaException("O char (" + here +") não é valido.", currentPos);
                 	}
                 	
                 	/* Verifica se a parede � valida */
                 	if (isWall(currentPos) && here == ' ') {
                 		reader.close();
-                		throw new MapaException("A parede n�o pode estar aberta (Conter espa�os em branco).", currentPos);
+                		throw new MapaException("A parede não pode estar aberta (Conter espaços em branco).", currentPos);
                 	}
                 	
                 	/* Procura por uma entrada (char == 'E') */
@@ -132,7 +132,7 @@ public class Mapa {
                 		this.entrada = currentPos;
                 	} else if (Character.toLowerCase(here) == 'e' && !isWall(currentPos)) {
                 		reader.close();
-                		/* Se a entrada n�o for em uma parede lan�a uma exception */
+                		/* Se a entrada não for em uma parede lança uma exception */
                 		throw new MapaException("Entrada localizada fora de uma parede.", currentPos);
                 	}
                 	
@@ -141,7 +141,7 @@ public class Mapa {
                 		this.saida = currentPos;
                 	} else if (Character.toLowerCase(here) == 's' && !isWall(currentPos)) {
                 		reader.close();
-                		/* Caso a saida n�o for em uma parede lan�a uma exception */
+                		/* Caso a saida não for em uma parede lança uma exception */
                 		throw new MapaException("Saida localizada fora de uma parede.", currentPos);
                 	}
                     this.labirinto[currentPos.getX()][currentPos.getY()] = here; // Salva o char na mem�ria
@@ -155,7 +155,7 @@ public class Mapa {
 
         /**
          * Verifica se o total de linhas ultrapassa o limite definido de altura
-         * O n�mero da linha (index) tem que ser subtraido 1 pois ele conta a linha 0 (que define o tamanho da altura)
+         * O número da linha (index) tem que ser subtraido 1 pois ele conta a linha 0 (que define o tamanho da altura)
          */
         if (index - 1 != this.altura) 
         {
@@ -163,13 +163,13 @@ public class Mapa {
             throw new MapaException("O número de linhas é diferente de " + this.altura);
         }
         
-        /* Verifica se est� faltando uma entrada */
+        /* Verifica se está faltando uma entrada */
         if (this.entrada == null) {
         	reader.close();
         	throw new MapaException("Está faltando uma entrada no mapa.");
         }
         
-        /* Verifica se est� faltando uma saida */
+        /* Verifica se está faltando uma saida */
         if (this.saida == null) {
         	reader.close();
         	throw new MapaException("Está faltando uma saida no mapa.");
@@ -251,7 +251,6 @@ public class Mapa {
      * @param stream
      */
     public void printMapa(PrintStream stream) {
-    	System.out.println("Player posicao: " + getPlayer().getPosicao());
     	String mapa = "";
     	for (int i = 0; i < this.altura; i++) {
         	for (int j = 0; j < this.largura; j++) {
@@ -300,19 +299,27 @@ public class Mapa {
      * @throws PilhaException
      */
     public Pilha<Coordenada> getAdjacentes(Coordenada pos) throws PilhaException {
-    	Pilha<Coordenada> res = new Pilha<Coordenada>(3);
+    	Pilha<Coordenada> res = new Pilha<Coordenada>(4);
    	 	
     	Coordenada cima = Coordenada.valueOf(pos.getX() - 1, pos.getY());
-    	if (checkAdjacente(this.labirinto[cima.getX()][cima.getY()]) && !getPlayer().isCaminho(cima)) // Verifica cima
+    	if (checkAdjacente(this.labirinto[cima.getX()][cima.getY()])) // Verifica cima
     		res.empilhar(cima);
     	
     	Coordenada baixo = Coordenada.valueOf(pos.getX() + 1, pos.getY());
-    	if (checkAdjacente(this.labirinto[baixo.getX()][baixo.getY()]) && !getPlayer().isCaminho(baixo)) // Verifica embaixo
+    	if (checkAdjacente(this.labirinto[baixo.getX()][baixo.getY()])) // Verifica embaixo
     		res.empilhar(baixo);
     	
     	Coordenada frente = Coordenada.valueOf(pos.getX(), pos.getY() + 1);
-    	if (checkAdjacente(this.labirinto[frente.getX()][frente.getY()]) && !getPlayer().isCaminho(frente)) // Verifica frente
+    	if (checkAdjacente(this.labirinto[frente.getX()][frente.getY()])) // Verifica frente
     		res.empilhar(frente);
+    	
+    	try {
+    		Coordenada tras = Coordenada.valueOf(pos.getX(), pos.getY() - 1);
+        	if (checkAdjacente(this.labirinto[tras.getX()][tras.getY()]))
+        		res.empilhar(tras);
+    	} catch (ArrayIndexOutOfBoundsException e) {
+    		// N acontece nada (Esta exception é lancada quando pega um caractere fora do mapa (posicao inicial)
+    	}
     	
     	return res;
     }

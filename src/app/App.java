@@ -19,7 +19,7 @@ public class App {
         File toLoad = null;
         
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Seta o Look do Chooser para Windows
-        
+  
         JFileChooser pick = new JFileChooser();
         pick.setFileFilter(new FileNameExtensionFilter("Arquivos de Texto", "txt")); // Seta um filtro para apenas .txt
         
