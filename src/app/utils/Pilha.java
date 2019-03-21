@@ -81,6 +81,24 @@ public class Pilha<E> {
  		return this.topo + 1;
  	}
  	
+ 	public boolean contains(E valor) throws PilhaException {
+ 		Pilha<E> aux = new Pilha<E>(this.tamanho);
+ 		boolean res = false;
+ 		while (!isEmpty()) {
+ 			E check = desempilhar();
+ 			aux.empilhar(check);
+ 			
+ 			if (check.equals(valor)) {
+ 				res = true;
+ 				break;
+ 			}
+ 		}
+ 		while (!aux.isEmpty()) {
+ 			empilhar(aux.desempilhar());
+ 		}
+ 		return res;
+ 	}
+ 	
  	@Override
  	public String toString() {
  		String res = "Pilha (" + totalElementos() + ") --> ";

@@ -1,5 +1,6 @@
 package app.core;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import app.core.enums.PlayerMode;
@@ -23,6 +24,7 @@ public class Player {
 	
 	/* Caminhos */
 	private Pilha<Coordenada> caminho;
+	private Pilha<Coordenada> caminhoRaw;
 	private Pilha<Pilha<Coordenada>> possibilidades;
 	
 	/**
@@ -57,6 +59,10 @@ public class Player {
 	public Coordenada getPosicao() {
 		return posicao;
 	}
+	
+	public Pilha<Coordenada> getCaminhoRaw() {
+		return this.caminhoRaw;
+	}
 
 	/**
 	 * Setter
@@ -77,6 +83,7 @@ public class Player {
 	 * @param @Mapa mapaAtual
 	 */
 	public void setMapa(Mapa mapaAtual) {
+		this.caminhoRaw = new Pilha<Coordenada>(mapaAtual.getAltura() * mapaAtual.getLargura());
 		this.caminho = new Pilha<Coordenada>(mapaAtual.getAltura() * mapaAtual.getLargura());
 		this.possibilidades = new Pilha<Pilha<Coordenada>>(mapaAtual.getAltura() * mapaAtual.getLargura());
 		this.mapaAtual = mapaAtual;
@@ -90,8 +97,9 @@ public class Player {
 	 * @param stream
 	 * @throws InterruptedException
 	 * @throws PilhaException
+	 * @throws IOException 
 	 */
-	public void startMoving(PrintStream stream) throws InterruptedException, PilhaException {
+	public void startMoving(PrintStream stream) throws InterruptedException, PilhaException, IOException {
 		stream.println("Start moving...");
 		while (!isSaida()) {
 			getMapa().printMapa(stream);
@@ -109,10 +117,9 @@ public class Player {
 							proxima = adj.desempilhar();
 						}
 						setPosicao(proxima);
-						
 						this.caminho.empilhar(proxima);
 						this.possibilidades.empilhar(adj);
-						
+						this.caminhoRaw.empilhar(proxima);
 					} catch (PilhaException e) {
 						setMode(PlayerMode.REGRESSIVE);
 						System.out.println("Modo regressivo!");
@@ -123,18 +130,21 @@ public class Player {
 					Pilha<Coordenada> adjt = this.possibilidades.desempilhar();
 					System.out.println(adjt);
 					if (adjt.isEmpty()) {
+						this.caminho.empilhar(mover);
 						setPosicao(mover); // Se não tiver possibilidades volta no caminho
 					} else {
 						Coordenada aprox = adjt.desempilhar();
 						System.out.println("Indo para " + aprox);
 						setPosicao(aprox);
+						this.caminhoRaw.empilhar(aprox);
 						setMode(PlayerMode.PROGRESSIVE);
 						System.out.println("Modo progressivo!");
 					}
 					break;
 			}
-			Thread.sleep(1000L); // Aguarda 1 segundo
+			Thread.sleep(200L); // Aguarda 1 segundo
 		}
+		getMapa().dumpToFile("win.txt");
 		stream.println("\n" + // Msg de fim :D
 				"       , , , , , ,\n" + 
 				"       |_|_|_|_|_|\n" + 

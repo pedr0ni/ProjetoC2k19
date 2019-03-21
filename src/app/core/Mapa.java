@@ -1,8 +1,10 @@
 package app.core;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -322,6 +324,35 @@ public class Mapa {
     	}
     	
     	return res;
+    }
+    
+    /**
+     * 
+     * @param filename
+     * @throws IOException 
+     * @throws PilhaException 
+     */
+    public void dumpToFile(String filename) throws IOException, PilhaException {
+    	File f = new File(this.file.getParent() + "/" + filename);
+    	if (f.exists()) {
+    		f.delete();
+    	}
+    	f.createNewFile();
+    	BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+    	String res = "";
+    	for (int i = 0; i < this.altura; i++) {
+    		for (int j = 0; j < this.largura; j++) {
+    			Coordenada current = Coordenada.valueOf(i, j);
+    			if (getPlayer().getCaminhoRaw().contains(current) && this.labirinto[i][j] != 'S') {
+    				res += "*";
+    			} else {
+    				res += this.labirinto[i][j];
+    			}
+    		}
+    		res += "\n";
+    	}
+    	writer.write(res);
+    	writer.close();
     }
     
     /**
