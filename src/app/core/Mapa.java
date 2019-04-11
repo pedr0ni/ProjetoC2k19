@@ -130,7 +130,12 @@ public class Mapa {
                 	}
                 	
                 	/* Procura por uma entrada (char == 'E') */
-                	if (Character.toLowerCase(here) == 'e' && this.entrada == null && isWall(currentPos)) {
+                	if (Character.toLowerCase(here) == 'e' && isWall(currentPos)) {
+                		if (this.entrada != null)
+                		{
+                			reader.close();
+                			throw new MapaException("O mapa possui mais de uma entrada.");	
+                		}
                 		this.entrada = currentPos;
                 	} else if (Character.toLowerCase(here) == 'e' && !isWall(currentPos)) {
                 		reader.close();
@@ -139,7 +144,11 @@ public class Mapa {
                 	}
                 	
                 	/* Procura por uma saida (char == 'S') */
-                	if (Character.toLowerCase(here) == 's' && this.saida == null && isWall(currentPos)) {
+                	if (Character.toLowerCase(here) == 's' && isWall(currentPos)) {
+                		if (this.saida != null) {
+                			reader.close();
+                			throw new MapaException("O mapa possui mais de uma saida.");
+                		}
                 		this.saida = currentPos;
                 	} else if (Character.toLowerCase(here) == 's' && !isWall(currentPos)) {
                 		reader.close();
@@ -266,6 +275,21 @@ public class Mapa {
         }
     	stream.println(mapa);
     }
+    
+    public String printMapa() {
+    	String mapa = "";
+    	for (int i = 0; i < this.altura; i++) {
+        	for (int j = 0; j < this.largura; j++) {
+        		Coordenada current = Coordenada.valueOf(i, j);
+        		if (getPlayer().getPosicao().equals(current)) 
+        			mapa += "*";
+        		else
+        			mapa += this.labirinto[i][j];
+        	}
+        	mapa += "\n";
+        }
+    	return mapa;
+    }
  
     /**
      * Verifica se o caractere � um item valido do mapa
@@ -301,24 +325,26 @@ public class Mapa {
      * @throws PilhaException
      */
     public Pilha<Coordenada> getAdjacentes(Coordenada pos) throws PilhaException {
-    	Pilha<Coordenada> res = new Pilha<Coordenada>(4);
+    	Pilha<Coordenada> res = new Pilha<Coordenada>();
    	 	
-    	Coordenada cima = Coordenada.valueOf(pos.getX() - 1, pos.getY());
-    	if (checkAdjacente(this.labirinto[cima.getX()][cima.getY()])) // Verifica cima
-    		res.empilhar(cima);
-    	
-    	Coordenada baixo = Coordenada.valueOf(pos.getX() + 1, pos.getY());
-    	if (checkAdjacente(this.labirinto[baixo.getX()][baixo.getY()])) // Verifica embaixo
-    		res.empilhar(baixo);
-    	
-    	Coordenada frente = Coordenada.valueOf(pos.getX(), pos.getY() + 1);
-    	if (checkAdjacente(this.labirinto[frente.getX()][frente.getY()])) // Verifica frente
-    		res.empilhar(frente);
-    	
     	try {
+    		
+    		Coordenada cima = Coordenada.valueOf(pos.getX() - 1, pos.getY());
+        	if (checkAdjacente(this.labirinto[cima.getX()][cima.getY()])) // Verifica cima
+        		res.empilhar(cima);
+        	
+        	Coordenada baixo = Coordenada.valueOf(pos.getX() + 1, pos.getY());
+        	if (checkAdjacente(this.labirinto[baixo.getX()][baixo.getY()])) // Verifica embaixo
+        		res.empilhar(baixo);
+        	
+        	Coordenada frente = Coordenada.valueOf(pos.getX(), pos.getY() + 1);
+        	if (checkAdjacente(this.labirinto[frente.getX()][frente.getY()])) // Verifica frente
+        		res.empilhar(frente);
+    		
     		Coordenada tras = Coordenada.valueOf(pos.getX(), pos.getY() - 1);
         	if (checkAdjacente(this.labirinto[tras.getX()][tras.getY()]))
         		res.empilhar(tras);
+        	
     	} catch (ArrayIndexOutOfBoundsException e) {
     		// N acontece nada (Esta exception é lancada quando pega um caractere fora do mapa (posicao inicial)
     	}

@@ -3,41 +3,37 @@ package app.utils;
 import app.exceptions.PilhaException;
 
 public class Pilha<E> {
+	
+	private class Node {
+		
+		private E item;
+		private Node next;
+		
+		public Node(E item, Node next) {
+			this.item = item;
+			this.next = next;
+		}
+		
+		public E getItem() {
+			return this.item;
+		}
+		
+		public Node getProximo() {
+			return this.next;
+		}
+		
+	}
 
 	/* Atributos da pilha */
-	private E[] vetor;
-	private int tamanho;
-	private int topo;
-	
-	@SuppressWarnings("unchecked")
-	public Pilha(int tamanho) {
-		this.tamanho = tamanho;	
-		this.vetor = (E[]) new Object[tamanho]; // Aloca espa�o para o vetor da pilha
-		this.topo = -1;
-	}
-	
-	/**
-	 * Getter
-	 * @return int Tamnho
-	 */
-	public int getTamanho() {
-		return this.tamanho;
-	}
+	private Node primeiro;
+	private int tamanho = 0;
 	
 	/**
 	 * Verifica se a pilha est� vazia
 	 * @return boolean Se a pilha estiver vazia
 	 */
 	public boolean isEmpty() {
-		return this.topo == -1;
-	}
-	
-	/**
-	 * Verifica se a pilha est� cheia
-	 * @return boolean Se a pilha estiver cheia
-	 */
-	public boolean isFull() {
-		return this.topo == this.tamanho - 1;
+		return this.primeiro == null;
 	}
 	
 	/**
@@ -46,9 +42,8 @@ public class Pilha<E> {
 	 * @throws PilhaException Se a pilha estiver cheia
 	 */
 	public void empilhar(E valor) throws PilhaException {
-		if (isFull())
-			throw new PilhaException("A pilha esta cheia");
-		this.vetor[++this.topo] = valor;
+		this.primeiro = new Node(valor, this.primeiro);
+		this.tamanho++;
 	}
 	
 	/**
@@ -59,7 +54,10 @@ public class Pilha<E> {
  	public E desempilhar() throws PilhaException {
  		if (isEmpty())
  			throw new PilhaException("A pilha esta vazia");
- 		return this.vetor[this.topo--];
+ 		E ret = this.primeiro.getItem();
+ 		this.primeiro = this.primeiro.getProximo();
+ 		this.tamanho--;
+ 		return ret;
  	}
  	
  	/**
@@ -70,19 +68,11 @@ public class Pilha<E> {
  	public E valorTopo() throws PilhaException {
  		if (isEmpty())
  			throw new PilhaException("Nenhum valor no topo. A pilha esta vazia");
- 		return this.vetor[this.topo];
- 	}
- 	
- 	/**
- 	 * Pega o total de elementos empilhados
- 	 * @return int Total de elementos
- 	 */
- 	public int totalElementos() {
- 		return this.topo + 1;
+ 		return this.primeiro.getItem();
  	}
  	
  	public boolean contains(E valor) throws PilhaException {
- 		Pilha<E> aux = new Pilha<E>(this.tamanho);
+ 		Pilha<E> aux = new Pilha<E>();
  		boolean res = false;
  		while (!isEmpty()) {
  			E check = desempilhar();
@@ -101,10 +91,8 @@ public class Pilha<E> {
  	
  	@Override
  	public String toString() {
- 		String res = "Pilha (" + totalElementos() + ") --> ";
- 		for (int i = 0; i < totalElementos(); i++) {
- 			res += this.vetor[i] + ", ";
- 		}
+ 		String res = "Pilha (" + this.tamanho + ") --> ";
+ 		
  		return res;
  	}
 	

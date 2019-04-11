@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import app.core.enums.PlayerMode;
 import app.exceptions.PilhaException;
 import app.utils.Pilha;
+import app.utils.UIBuilder;
 
 /**
  * Classe Player
@@ -83,15 +84,12 @@ public class Player {
 	 * @param @Mapa mapaAtual
 	 */
 	public void setMapa(Mapa mapaAtual) {
-		this.caminhoRaw = new Pilha<Coordenada>(mapaAtual.getAltura() * mapaAtual.getLargura());
-		this.caminho = new Pilha<Coordenada>(mapaAtual.getAltura() * mapaAtual.getLargura());
-		this.possibilidades = new Pilha<Pilha<Coordenada>>(mapaAtual.getAltura() * mapaAtual.getLargura());
+		this.caminhoRaw = new Pilha<Coordenada>();
+		this.caminho = new Pilha<Coordenada>();
+		this.possibilidades = new Pilha<Pilha<Coordenada>>();
 		this.mapaAtual = mapaAtual;
 	}
 	
-	private Coordenada checkCima() {
-		return Coordenada.valueOf(this.posicao.getX() - 1, this.posicao.getY());
-	}
 	/**
 	 * 
 	 * @param stream
@@ -99,16 +97,17 @@ public class Player {
 	 * @throws PilhaException
 	 * @throws IOException 
 	 */
-	public void startMoving(PrintStream stream) throws InterruptedException, PilhaException, IOException {
+	public void startMoving(PrintStream stream, long delay) throws InterruptedException, PilhaException, IOException {
 		stream.println("Start moving...");
+		//UIBuilder ui = new UIBuilder(getMapa());
 		while (!isSaida()) {
+			//ui.update();
 			getMapa().printMapa(stream);
 			switch (this.mode) {
 			
 				case PROGRESSIVE:
 					Pilha<Coordenada> adj = getMapa().getAdjacentes(this.posicao);
 					Coordenada proxima = null;
-					
 					try {
 						System.out.println("Player: " + this);
 						System.out.println("POSSIVEIS: " + adj);
@@ -142,7 +141,6 @@ public class Player {
 					}
 					break;
 			}
-			Thread.sleep(200L); // Aguarda 1 segundo
 		}
 		getMapa().dumpToFile("win.txt");
 		stream.println("\n" + // Msg de fim :D
@@ -165,7 +163,7 @@ public class Player {
 	 * @throws PilhaException
 	 */
 	public boolean isCaminho(Coordenada pos) throws PilhaException {
-		Pilha<Coordenada> aux = new Pilha<Coordenada>(this.caminho.getTamanho());
+		Pilha<Coordenada> aux = new Pilha<Coordenada>();
 		boolean res = false;
 		while (!this.caminho.isEmpty()) {
 			Coordenada check = this.caminho.desempilhar();

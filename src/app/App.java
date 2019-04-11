@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import app.core.Mapa;
 import app.core.Player;
+import app.utils.UIBuilder;
 
 public class App {
 
@@ -29,14 +30,14 @@ public class App {
         
         Mapa mapa = new Mapa(toLoad); // Cria um novo Mapa
         
-        Player meuPlayer = new Player("Matheus");     
-        
+        Player meuPlayer = new Player("Matheus"); 
+        	
         try {	
             mapa.loadMapa(); // Carrega o mapa
             mapa.setPlayer(meuPlayer);
-            meuPlayer.startMoving(System.out);
+            meuPlayer.startMoving(System.out, 200L);
         } catch (Exception e) {
-            System.out.println(e.getClass().getName() + ": " + e.getMessage());
+        	e.printStackTrace();
         }
         
     }

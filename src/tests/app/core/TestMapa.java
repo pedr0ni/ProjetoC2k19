@@ -14,7 +14,7 @@ import app.exceptions.MapaException;
 public class TestMapa {
 	
 	/**
-	 * Teste para passar um mapa que não existe
+	 * Teste para passar um mapa que nï¿½o existe
 	 * @throws Exception
 	 */
 	@Test(expected = IOException.class)
@@ -59,19 +59,29 @@ public class TestMapa {
 	}
 	
 	/**
-	 * Teste para um mapa que está carregando largura ou altura incorreta(s)
-	 * Este teste também verifica se ocorreu alguma exception em um mapa correto
+	 * Teste para um mapa que estï¿½ carregando largura ou altura incorreta(s)
+	 * Este teste tambï¿½m verifica se ocorreu alguma exception em um mapa correto
 	 */
 	@Test
 	public void testLoadMapa() {
 		Mapa mapa = getMapa("mapa");
 		try {
 			mapa.loadMapa();
-			assertEquals("A altura está incorreta", 3, mapa.getAltura());
-			assertEquals("A largura está incorreta", 9, mapa.getLargura());
+			assertEquals("A altura estï¿½ incorreta", 3, mapa.getAltura());
+			assertEquals("A largura estï¿½ incorreta", 9, mapa.getLargura());
 		} catch (Exception e) {
-			fail("Este é um mapa válido mas causou uma exeption: " + e.getMessage());
+			fail("Este ï¿½ um mapa vï¿½lido mas causou uma exeption: " + e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testProfInvalidos() {
+		
+	}
+	
+	@Test
+	public void testProfValidos() {
+		
 	}
 	
 	/**
